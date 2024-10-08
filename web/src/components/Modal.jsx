@@ -13,7 +13,7 @@ export const Modal = ({ children, isOpen, onClose }) => {
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-end justify-center md:p-4 text-center sm:items-center p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full max-w-sm md:max-w-md sm:p-6">
+          <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 w-full max-w-sm md:max-w-md sm:p-6">
             <button
               type="button"
               onClick={() => onClose()}

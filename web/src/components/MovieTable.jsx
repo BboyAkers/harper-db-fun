@@ -1,9 +1,9 @@
-export const MovieTable = ({ movies }) => {
+export const MovieTable = ({ movies, removeMovie }) => {
   return (
     <>
-      <div class="flow-root">
-        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div className="flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
@@ -41,6 +41,9 @@ export const MovieTable = ({ movies }) => {
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {movie.release_date}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <button className="px-4 py-2 bg-red-500 rounded-xl text-white" onClick={()=>{ removeMovie(movie.id)}}>Delete</button>
                     </td>
                   </tr>
                 ))}

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { MovieTable } from "./MovieTable";
 import { MovieForm } from "./MovieForm";
+import { Notification } from "./Notification";
 import { Modal } from "./Modal";
 import {
   isExistingMovie,
@@ -9,7 +10,7 @@ export const MovieView = ({ movies, genres, setMovies }) => {
   const [toggleMovieModal, setToggleMovieModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [movieError, setMovieError] = useState("");
-
+  const [isNotified, setIsNotified] = useState(false);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.trim());
@@ -33,27 +34,62 @@ export const MovieView = ({ movies, genres, setMovies }) => {
       : formattedMovies;
   }, [formattedMovies, genres, searchQuery]);
 
-  const handleMovieSubmit = (event) => {
+  const handleMovieSubmit = async (event) => {
     event.preventDefault();
     setMovieError("");
     const title = event.target.elements.titleInput.value.trim();
     const genre_ids = [...event.target.elements.genreInput.options].filter(opt => opt.selected).map(opt => Number(opt.value))
     const releaseDate = event.target.elements.yearInput.value;
     const newMovie = {
-      id: movies.length + 1,
+      id: String(movies.length + 1),
       title,
       genre_ids,
-      release_date: releaseDate,
+      release_date: Number(releaseDate),
     };
     if (isExistingMovie(movies, newMovie)) {
       setMovieError("Movie already exists");
       return;
     }
-    setMovies([...movies, newMovie]);
-    setToggleMovieModal(false);
-    event.target.reset();
+    try {
+      const response = await fetch("/Movie/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMovie),
+      });
+      if(response.ok){
+        setMovies([...movies, newMovie]);
+        event.target.reset();
+        setToggleMovieModal(false);
+        setIsNotified(true);
+        setTimeout(() => {
+          setIsNotified(false);
+          }, 4000);
+      } else {
+        setMovieError("Failed to add movie please try again later");
+        return;
+      }
+    } catch (error) {
+      setMovieError("Failed to add movie please try again later");
+      return;
+    }
   };
 
+  const removeMovie = async (id) => {
+    try {
+      const response = await fetch(`/Movie/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setMovies(movies.filter((movie) => movie.id !== id));
+      } else {
+        console.error("Failed to delete movie");
+      }
+    } catch (error) {
+      console.error("Failed to delete movie: ", error);
+    }
+  }
   return (
     <>
       <div>
@@ -80,10 +116,12 @@ export const MovieView = ({ movies, genres, setMovies }) => {
                 <option key={genre.id} value={genre.name}></option>
               ))}
             </datalist>
-            <MovieTable movies={filteredMovies} />
+            <MovieTable movies={filteredMovies} removeMovie={removeMovie} />
           </>
         ) : (
-          <p>Loading...</p>
+        <div className="flex justify-center items-center h-96">
+          <p>No Movies Found</p>
+        </div>
         )}
       </div>
       <Modal isOpen={toggleMovieModal} onClose={() => setToggleMovieModal(false)}>
@@ -93,6 +131,9 @@ export const MovieView = ({ movies, genres, setMovies }) => {
           movieError={movieError}
         />
       </Modal>
+      <Notification isOpen={isNotified} onClose={() => setIsNotified(false)}>
+      <p className="w-0 flex-1 text-sm font-medium text-gray-900">Movie added successfully!</p>
+      </Notification>
     </>
   );
 };
