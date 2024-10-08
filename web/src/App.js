@@ -29,7 +29,7 @@ function App() {
   return (
     <div className="container mx-auto px-4">
       <header className="text-center">
-        <h1 className="text-2xl md:text-3xl pb-2">Movie Database</h1>
+        <h1 className="text-2xl md:text-3xl pb-2 pt-6">Movie Database</h1>
         <p>Welcome to the Movie Database!</p>
         <div>
           <div className="block">
