@@ -1,9 +1,6 @@
 export const MovieForm = ({genres, handleMovieSubmit, movieError}) => {
   return (
-    <form
-      className=""
-      onSubmit={handleMovieSubmit}
-    >
+    <form onSubmit={handleMovieSubmit}>
       <h3>Add Movie</h3>
       <label className="block py-2">
         Title:

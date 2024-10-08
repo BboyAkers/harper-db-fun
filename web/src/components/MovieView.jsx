@@ -1,18 +1,16 @@
 import { useState, useMemo } from "react";
-import { MovieTable } from "./components/MovieTable";
-import { MovieForm } from "./components/MovieForm";
-import { Modal } from "./components/Modal";
+import { MovieTable } from "./MovieTable";
+import { MovieForm } from "./MovieForm";
+import { Modal } from "./Modal";
 import {
-  isExistingGenre,
-  generateRandomGenreId,
   isExistingMovie,
-} from "./utils";
-const MovieView = ({ movies, genres, setMovies, setGenres }) => {
+} from "../utils";
+export const MovieView = ({ movies, genres, setMovies }) => {
   const [toggleMovieModal, setToggleMovieModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [movieError, setMovieError] = useState("");
 
-  
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.trim());
   };
@@ -59,7 +57,6 @@ const MovieView = ({ movies, genres, setMovies, setGenres }) => {
   return (
     <>
       <div>
-        <h2 className="text-xl">Popular Movies</h2>
         <div className="flex justify-between">
           <input
             list="genrelist"
@@ -73,7 +70,7 @@ const MovieView = ({ movies, genres, setMovies, setGenres }) => {
             className="px-4 bg-blue-500 rounded-xl text-white"
             onClick={() => setToggleMovieModal(true)}
           >
-            +Add Movie
+            + Add Movie
           </button>
         </div>
         {movies.length ? (

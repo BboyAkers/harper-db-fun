@@ -1,9 +1,6 @@
 export const GenreForm = ({ handleGenreSubmit, genreError }) => {
   return (
-    <form
-      className="max-w-3xl bg-white text-blue max-h-[600px] rounded-2xl mt-8 p-8 shadow-lg"
-      onSubmit={handleGenreSubmit}
-    >
+    <form onSubmit={handleGenreSubmit}>
       <label className="block py-2">
         <span className="text-lg">Add New Genre</span>
         <input
